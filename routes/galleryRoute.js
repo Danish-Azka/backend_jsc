@@ -1,13 +1,14 @@
 import express from "express"
 import multer from "multer";
 import { createGallery, deleteGallery, getGallery, updateGallery} from "../controller/galleryController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 const galleryRoute = express.Router();
 
 
 const upload = multer({ dest: "uploads/" });
 
 galleryRoute.post("/gallery/post",upload.single("img"),createGallery);
-galleryRoute.get("/gallery/get", getGallery)
+galleryRoute.get("/gallery/get", verifyToken,getGallery)
 galleryRoute.put(
   "/gallery/update/:id",
   upload.single("img"),

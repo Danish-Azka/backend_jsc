@@ -106,14 +106,25 @@ export const loginAdmin = async (req, res) => {
       { where: { id: admin.id } }
     );
 
-    res.cookie("refreshToken", refreshToken, {
-  httpOnly: true,
-  secure: false,
-  sameSite: "lax",
-  maxAge: 7 * 24 * 60 * 60 * 1000
-});
+    // simpan access token di cookie
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000
+    });
 
-    res.json({ accessToken });
+    // simpan refresh token di cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.json({
+      message: "Login berhasil"
+    });
 
   } catch (error) {
     console.log(error);
@@ -130,6 +141,7 @@ export const logoutAdmin = async (req, res) => {
 
     if (!refreshToken) {
       res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
       return res.status(200).json({
         message: "Logout berhasil"
       });
@@ -147,6 +159,7 @@ export const logoutAdmin = async (req, res) => {
     }
 
     res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
 
     return res.status(200).json({
       message: "Logout berhasil"
@@ -156,12 +169,11 @@ export const logoutAdmin = async (req, res) => {
 
     console.log("Logout error:", error);
     console.log("cookies:", req.cookies);
-console.log("refreshToken:", req.cookies?.refreshToken);
+    console.log("refreshToken:", req.cookies?.refreshToken);
 
     return res.status(500).json({
       message: error.message
     });
 
   }
-  
 };

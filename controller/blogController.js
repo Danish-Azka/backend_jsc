@@ -1,4 +1,6 @@
 import Blog from "../models/blogModel.js";
+import fs from "fs";
+import path from "path";
 
 export const createBlog = async (req, res) => {
   try {
@@ -64,6 +66,13 @@ export const deleteBlog = async (req, res) => {
     const blog = await Blog.findByPk(id);
     if (!blog) {
       return res.status(404).json({ message: "blog tidak ditemukan" });
+    }
+
+ if (blog.img) {
+      const filePath = path.join("uploads", blog.img);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await blog.destroy();

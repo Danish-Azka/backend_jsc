@@ -1,4 +1,6 @@
 import Gallery from "../models/galleryModel.js";
+import fs from "fs";
+import path from "path";
 
 export const createGallery = async (req, res) => {
   try {
@@ -78,6 +80,13 @@ export const deleteGallery = async (req, res) => {
     const gallery = await Gallery.findByPk(id);
     if (!gallery) {
       return res.status(404).json({ message: "gallery tidak ditemukan" });
+    }
+
+ if (gallery.img) {
+      const filePath = path.join("uploads", gallery.img);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await gallery.destroy();

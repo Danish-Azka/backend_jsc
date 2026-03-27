@@ -1,4 +1,6 @@
 import Prestasi from "../models/prestasiModel.js";
+import fs from "fs";
+import path from "path";
 
 export const createPrestasi = async (req, res) => {
   try {
@@ -80,12 +82,19 @@ export const deletePrestasi = async (req, res) => {
 
     const prestasi = await Prestasi.findByPk(id);
     if (!prestasi) {
-      return res.status(404).json({ message: "Pengurus tidak ditemukan" });
+      return res.status(404).json({ message: "prestasi tidak ditemukan" });
+    }
+
+ if (prestasi.img) {
+      const filePath = path.join("uploads", prestasi.img);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await prestasi.destroy();
 
-    res.status(200).json({ message: "Pengurus berhasil dihapus" });
+    res.status(200).json({ message: "prestasi berhasil dihapus" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

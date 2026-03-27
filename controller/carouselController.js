@@ -1,4 +1,6 @@
 import Carousel from "../models/carouselModel.js";
+import fs from "fs";
+import path from "path";
 
 export const createCarousel = async (req, res) => {
   try {
@@ -58,6 +60,14 @@ export const deleteCarousel = async (req, res) => {
     const carousel = await Carousel.findByPk(id);
     if (!carousel) {
       return res.status(404).json({ message: "carousel tidak ditemukan" });
+    }
+
+
+ if (carousel.img) {
+      const filePath = path.join("uploads", carousel.img);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await carousel.destroy();

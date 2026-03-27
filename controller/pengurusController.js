@@ -1,4 +1,6 @@
 import Pengurus from "../models/pengurusModels.js";
+import fs from "fs";
+import path from "path";
 
 export const createPengurus = async (req, res) => {
   try {
@@ -77,6 +79,13 @@ export const deletePengurus = async (req, res) => {
     const pengurus = await Pengurus.findByPk(id);
     if (!pengurus) {
       return res.status(404).json({ message: "Pengurus tidak ditemukan" });
+    }
+
+    if (pengurus.img) {
+      const filePath = path.join("uploads", pengurus.img);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await pengurus.destroy();

@@ -23,32 +23,6 @@ export const getAdmin = async (req, res) => {
     }
 };
 
-export const registerAdmin = async (req, res) => {
-    const { email, password, confPassword } = req.body;
-
-    if (!email || !password || !confPassword) {
-        return res.status(400).json({ message: "Pastikan semua field terisi" });
-    }
-
-    if (password !== confPassword) {
-        return res.status(400).json({ message: "Password dan Confirm Password tidak cocok" });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    try {
-        await Admin.create({
-            email,
-            password: hashedPassword,
-        });
-
-        res.status(201).json({ message: "Register Berhasil" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
 export const loginAdmin = async (req, res) => {
   try {
 
@@ -106,7 +80,6 @@ export const loginAdmin = async (req, res) => {
       { where: { id: admin.id } }
     );
 
-    // simpan access token di cookie
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
@@ -114,7 +87,6 @@ export const loginAdmin = async (req, res) => {
       maxAge: 15 * 60 * 1000
     });
 
-    // simpan refresh token di cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,

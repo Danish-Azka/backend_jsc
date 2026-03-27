@@ -10,12 +10,13 @@ import { carouselRoute } from "./routes/carouselRoute.js";
 import { blogRoute } from "./routes/blogRoute.js";
 import { galleryRoute } from "./routes/galleryRoute.js";
 import { getOnly } from "./routes/getOnlyRoute.js";
+import { upComingEventRoute } from "./routes/upComingEventRoute.js";
 
 const app = express();
-const PORT = 3008;
+const PORT = 5000;
 
 app.use(cors({
-  origin: ["http://localhost:3008", "http://localhost:5173"],
+  origin: ["http://localhost:5173"],
   credentials: true
 }));
 app.use(cookieParser());
@@ -31,6 +32,7 @@ app.use(carouselRoute);
 app.use(blogRoute);
 app.use(galleryRoute)
 app.use(getOnly)
+app.use(upComingEventRoute)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

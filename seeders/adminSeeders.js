@@ -5,7 +5,9 @@ dotenv.config();
 
 export default {
   async up(queryInterface, Sequelize) {
+  try {
     console.log("Seeder jalan...");
+    console.log(process.env.ADMIN_EMAIL);
 
     const existingAdmin = await queryInterface.sequelize.query(
       `SELECT * FROM admin WHERE email = :email`,
@@ -14,6 +16,8 @@ export default {
         type: Sequelize.QueryTypes.SELECT
       }
     );
+
+    console.log("existingAdmin:", existingAdmin);
 
     if (existingAdmin.length > 0) {
       console.log("Admin already exists");
@@ -36,7 +40,11 @@ export default {
     ]);
 
     console.log("Admin berhasil dibuat");
-  },
+
+  } catch (err) {
+    console.error("ERROR SEEDER:", err);
+  }
+},
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete("admin", {

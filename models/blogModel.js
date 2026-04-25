@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import db from '../utils/connection.js'
 
+
+// Blog Model
 const Blog = db.define(
     "Blog", {
     id: {

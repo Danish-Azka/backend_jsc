@@ -7,7 +7,6 @@ export default {
   async up(queryInterface, Sequelize) {
     console.log("Seeder jalan...");
 
-    // cek apakah admin sudah ada
     const existingAdmin = await queryInterface.sequelize.query(
       `SELECT * FROM admin WHERE email = :email`,
       {
@@ -21,13 +20,11 @@ export default {
       return;
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(
       process.env.ADMIN_PASSWORD,
       10
     );
 
-    // insert admin
     await queryInterface.bulkInsert("admin", [
       {
         email: process.env.ADMIN_EMAIL,

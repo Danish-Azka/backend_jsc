@@ -22,8 +22,6 @@ export const createPengurus = async (req, res) => {
   }
 };
 
-
-
 export const getPengurus = async (req, res) => {
   try {
     const pengurus = await Pengurus.findAll();
